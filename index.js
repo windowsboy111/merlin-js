@@ -111,7 +111,6 @@ bot.on('message', message => {
                 currency.add(message.author.id, -item.cost);
                 user.addItem(item);
             });
-    
             return message.channel.send(`You've bought a ${item.name}`);
         });
         return;
