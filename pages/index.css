@@ -1,0 +1,52 @@
+p a {
+    color: lightblue;
+    position: absolute;
+}
+
+
+
+
+
+
+
+
+
+
+
+* {
+    color: white;
+    background-color: black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Arial, Helvetica, sans-serif;
+    position: relative;
+    z-index: 0;
+}
+body h1 {
+    color: white;
+    position: fixed;
+    width: 100%; 
+    z-index: -1;
+    top: 30px;
+    font-size: 3em;
+}
+body h3 {
+    top: 100px;
+    line-break: auto;
+    word-wrap: normal;
+} 
+ul.navbar {
+    font-size: 2em;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    top: 0%;
+    height: 30px;
+    height: 1.5em;
+    background-color: #222222;
+}
+ul.navbar li {
+    display: inline;
+    background-color: #222222;
+}
+ul.navbar li a {
+    background-color: #222222;
+}

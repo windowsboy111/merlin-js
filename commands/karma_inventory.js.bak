@@ -1,0 +1,40 @@
+const Discord = require('discord.js');
+const currency = new Discord.Collection();
+const { Users, CurrencyShop } = require('../dbObjects');
+// => karma: helper methods
+Reflect.defineProperty(currency, 'add', {
+	value: async function add(id, amount) {
+		const user = currency.get(id);
+		if (user) {
+			user.balance += Number(amount);
+			return user.save();
+		}
+		const newUser = await Users.create({ user_id: id, balance: amount });
+		currency.set(id, newUser);
+		return newUser;
+	},
+});
+
+Reflect.defineProperty(currency, 'getBalance', {
+	value: function getBalance(id) {
+		const user = currency.get(id);
+		return user ? user.balance : 0;
+	},
+});
+// <= karma: helper methods
+module.exports = {
+	name: 'inv',
+	description: 'what is inside your pocket? (karma)',
+	cooldown: 10,
+    args: false,
+    aliases: ['inventory'],
+    usage: "[<user>]",
+	async execute(message, args) {
+        const target = message.mentions.users.first() || message.author;
+        const user = await Users.findOne({ where: { user_id: target.id } });
+        const items = await user.getItems();
+        
+        if (!items.length) return message.channel.send(`${target.tag} has nothing! :pensive:`);
+        return message.channel.send(`${target.tag} currently has ${items.map(i => `${i.amount} ${i.item.name}`).join(', ')}`);
+    }
+}

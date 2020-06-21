@@ -1,0 +1,13 @@
+pingJson = pingData;
+rt = document.getElementById("rt");
+sm = document.getElementById("sm");
+em = document.getElementById("em");
+dm = document.getElementById("dm");
+lp = document.getElementById("lp");
+rt.innerHTML = "response:  " + pingJson.responseTime;
+sm.innerHTML = "send-msg:  " + pingJson.sendTime;
+em.innerHTML = "edit-msg:  " + pingJson.editTime;
+dm.innerHTML = "del-msg:   " + pingJson.delTime;
+var date = new Date();
+date.setTime(pingJson.time);
+lp.innerHTML = "last-ping: " + date.toString();

@@ -1,0 +1,1 @@
+var pingData = {"responseTime": -50800,"sendTime": -51115,"editTime": 3, "delPing": 0, "time": 1592739549654}
