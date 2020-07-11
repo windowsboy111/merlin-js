@@ -1,14 +1,9 @@
-// => runtime: author machine extra settings
-process.chdir('/home/windowsboy111/Documents/drive/coding/node.js/Merlin/');
-const TOKEN = "NjkwODM5MDk5NjQ4NjM4OTc3.Xry74g.d4EtDQuncVrvWRrEB_Apjjgk8-I";
-const prefix = "$";
-// <= runtime: author machine extra settings
 // => init: import / require libraries
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const webpage = require('./webServer.js');
-// const prefix = process.env.prefix
-// const TOKEN = process.env.TOKEN
+const prefix = process.env.prefix
+const TOKEN = process.env.TOKEN
 const { Users, CurrencyShop } = require('./dbObjects');
 const { Op } = require('sequelize');
 const currency = new Discord.Collection();
@@ -17,14 +12,14 @@ const fs = require('fs');
 const cooldowns = new Discord.Collection();
 bot.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
+for (var file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	// set a new item in the Collection
 	// with the key as the command name and the value as the exported module
 	bot.commands.set(command.name, command);
 }
 // <= commands: import
-lastmsg = null;
+var lastmsg;
 console.log('Finished loading all libraries and commands.');
 // => karma: helper methods
 Reflect.defineProperty(currency, 'add', {
@@ -74,7 +69,7 @@ bot.on('message', message => {
         }
     }
     currency.add(message.author.id, 1);
-    
+
     if (message.content.toLowerCase() === '$balance' || message.content.toLowerCase() === '$bal') {
         const target = message.mentions.users.first() || message.author;
         return message.channel.send(`${target.tag} has ${currency.getBalance(target.id)}💰`);
@@ -106,7 +101,7 @@ bot.on('message', message => {
             if (item.cost > currency.getBalance(message.author.id)) {
                 return message.channel.send(`You don't have enough karma, ${message.author}`);
             }
-    
+
             Users.findOne({ where: { user_id: message.author.id } }).then(user => {
                 currency.add(message.author.id, -item.cost);
                 user.addItem(item);
@@ -129,7 +124,7 @@ bot.on('message', message => {
             { code: true }
         );
     }
-    if (message.content.startsWith(prefix)){
+    if (message.content.startsWith(prefix)) {
         const args = message.content.slice(prefix.length).split(/ +/);
         if (!args) {
             console.log('cannot process command.');
@@ -139,10 +134,10 @@ bot.on('message', message => {
         const command = bot.commands.get(commandName)
             || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return message.reply(`command \`${commandName}\` not found!\nTry \`/${message.content.slice(prefix.length)}\`.`);
-        try{
+        try {
             if (command.guildOnly && message.channel.type !== 'text') {
                 return message.reply('I can\'t execute that command inside DMs!');
-            }            
+            }
             if (command.args && !args.length) {
                 let reply = `You didn't provide any arguments, ${message.author}!`;
                 if (command.usage) {
@@ -194,30 +189,6 @@ bot.on('message', message => {
         if (message.content.toLowerCase() == "sirius-") {
             var ans = ['-smart','-stupid'];
             message.channel.send(ans[Math.floor(Math.random()*ans.length)])
-        }
-        // if (message.content.toLowerCase() == "listen to music") {
-        //     let channel = message.guild.channels.get("683838655755976704");  
-        //     channel.createInvite({unique: true}).then(
-        //         invite => {  
-        //             message.reply("Hey! I've created you an invite: https://discord.gg/" + invite.code)
-        //         }
-        //     );
-        //     return;
-        // }
-        if(message.author.bot) return;
-        if (lastmsg == null){
-            lastmsg=[message.content.toLowerCase(),message.author,1,false]
-        } else if (lastmsg[2] == 4 && message.content.toLowerCase() == lastmsg[0] && message.author.equals(lastmsg[1]) && lastmsg[3]){
-            lastmsg[2]+=1
-            message.delete();
-            message.channel.send(`/warn <@${message.author.id}>`)
-        } else if (lastmsg[0] == message.content.toLowerCase() && lastmsg[1] == message.author) {
-            lastmsg[2]+=1;
-            if (lastmsg[2] == 4){
-                lastmsg[3]=true
-            }
-        } else {
-            lastmsg=[message.content.toLowerCase(),message.author,1,false]
         }
     }
 });
